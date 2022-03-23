@@ -11,14 +11,14 @@ function dbconnect(){
     if(!$db){
         die($db->error);
     }
-    $sql = 'create table IF NOT EXISTS members (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name char(32),
-        email varchar(128),
-        password TEXT
-    )';
-    // 宣言したデータベースで$sqlを実行
-    $db->query($sql);
+    // $sql = 'create table IF NOT EXISTS members (
+    //     id INT AUTO_INCREMENT PRIMARY KEY,
+    //     name char(32),
+    //     email varchar(128),
+    //     password TEXT
+    // )';
+    // // 宣言したデータベースで$sqlを実行
+    // $db->query($sql);
     return $db;
 }
 ?>

@@ -21,7 +21,7 @@
         // 新規画面の時は初期化
         $form = [
             'name' => '',
-            'email' => '',
+            // 'email' => '',
             'password' => ''
         ];
     }
@@ -37,37 +37,37 @@
             $error['name'] = 'blank';
         }
 
-        // --------------------  メールアドレスの空白エラーキャッチ ----------------------
-        $form['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        // メールの欄が空欄の時
-        if($form['email'] == ''){
-            // エラー配列のemail要素にblankを格納
-            $error['email'] = 'blank';
-        // --------------------  メールアドレスのかぶりエラーキャッチ --------------------
-        }else{
-            // データベースに接続(../library.phpで宣言した関数)
-            $db = dbconnect();
-            // テーブルから全てのデータを抽出
-            $stmt = $db->prepare('select count(*) from members where email=?');
-            if(!$stmt){
-                die($db->error);
-            }
-            $stmt->bind_param('s', $form['email']);
-            $success = $stmt->execute();
-            if(!$success){
-                die($db->error);                
-            }
+        // // --------------------  メールアドレスの空白エラーキャッチ ----------------------
+        // $form['email'] = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        // // メールの欄が空欄の時
+        // if($form['email'] == ''){
+        //     // エラー配列のemail要素にblankを格納
+        //     $error['email'] = 'blank';
+        // // --------------------  メールアドレスのかぶりエラーキャッチ --------------------
+        // }else{
+        //     // データベースに接続(../library.phpで宣言した関数)
+        //     $db = dbconnect();
+        //     // テーブルから全てのデータを抽出
+        //     $stmt = $db->prepare('select count(*) from members where email=?');
+        //     if(!$stmt){
+        //         die($db->error);
+        //     }
+        //     $stmt->bind_param('s', $form['email']);
+        //     $success = $stmt->execute();
+        //     if(!$success){
+        //         die($db->error);                
+        //     }
 
-            // 実行結果を$cntにバインド
-            $stmt->bind_result($cnt);
-            // 値を取得
-            $stmt->fetch();
-            // $cntが0より大きい = 同じメールアドレスが存在する時
-            if($cnt > 0){
-                // エラー配列のemail要素にduplicateを格納
-                $error['email'] = 'duplicate';
-            }
-        }
+        //     // 実行結果を$cntにバインド
+        //     $stmt->bind_result($cnt);
+        //     // 値を取得
+        //     $stmt->fetch();
+        //     // $cntが0より大きい = 同じメールアドレスが存在する時
+        //     if($cnt > 0){
+        //         // エラー配列のemail要素にduplicateを格納
+        //         $error['email'] = 'duplicate';
+        //     }
+        // }
 
         // --------------------  パスワードの空白、文字数エラーキャッチ -------------------------
         $form['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
@@ -109,17 +109,6 @@
         <!-- エラーメッセージ(空白) -->
         <?php if(isset($error['name']) && $error['name'] === 'blank'): ?>
             <p>※名前を入力してください</p>
-        <?php endif; ?>
-
-        <!-- ------------------- メールアドレス ------------------------ -->
-        <input type="text" name="email" placeholder="メールアドレス" value="<?php echo h($form['email']); ?>"><br>
-        <!-- エラーメッセージ(空白) -->
-        <?php if(isset($error['email']) && $error['email'] === 'blank'): ?>
-            <p>※メールアドレスを入力してください</p>
-        <?php endif; ?>
-        <!-- エラーメッセージ(メールの重複) -->
-        <?php if(isset($error['email']) && $error['email'] === 'duplicate'): ?>
-            <p>※指定したメールアドレスは既に登録されています</p>
         <?php endif; ?>
 
         <!-- ------------------- パスワード --------------------------- -->
